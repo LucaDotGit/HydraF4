@@ -1,0 +1,1 @@
+Scriptname ConeProjectile extends ObjectReference Hidden Native

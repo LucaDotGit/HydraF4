@@ -1,0 +1,29 @@
+{
+	/*
+	"localFunctions": [
+		{
+		{
+			"eventName": "OnPostLoadGame",
+			"boundObject": "@Form:'MyScript'|'Fallout4.esm'|0x000014",
+			"functionName": "OnPostLoadGame"
+		}
+	],
+	"globalFunctions": [
+		{
+			"eventName": "OnPostLoadGame",
+			"scriptName": "MyScript",
+			"functionName": "OnPostLoadGame"
+		},
+		{
+			"eventName": "OnUserEvent",
+			"scriptName": "MyScript",
+			"functionName": "OnPostLoadGame",
+			"eventArgs": {
+				"kIncludedEventNames": [
+					"MyUserEventName"
+				]
+			}
+		}
+	]
+	*/
+}

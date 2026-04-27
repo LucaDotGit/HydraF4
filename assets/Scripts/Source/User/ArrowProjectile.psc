@@ -1,0 +1,1 @@
+Scriptname ArrowProjectile extends MissileProjectile Hidden Native

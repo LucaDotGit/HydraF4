@@ -1,0 +1,1 @@
+Scriptname FlameProjectile extends ObjectReference Hidden Native

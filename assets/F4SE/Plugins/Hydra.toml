@@ -1,0 +1,52 @@
+[Debug]
+
+# [Default: 2] The minimum level of information that is printed to the plugin's log file.
+# 00 = Trace
+# 01 = Debug
+# 02 = Information
+# 03 = Warning
+# 04 = Error
+# 05 = Critical
+# 06 = Off
+iLogLevel = 2
+
+# [Default: -1] The number of log files to keep before overwriting older ones.
+iLogFileCount = -1
+
+# [Default: false] Whether Papyrus log messages sent by this plugin are forwarded to the plugin's log file.
+bLogPapyrusMessages = false
+
+# [Default: false] Whether found Papyrus scripts compiled in debug mode are printed to the plugin's log file.
+# Debug scripts will be determined by whether they have any debug line numbers present,
+# which are normally omitted in full release builds.
+# Note that script debug information has to be loaded by the engine first (`Papyrus:bLoadDebugInformation = 1`).
+bLogDebugPapyrusScripts = false
+
+# [Default: true] Whether found Papyrus scripts with invalid linkage are printed to the plugin's log file.
+bLogInvalidLinkedPapyrusScripts = true
+
+# [Default: true] Whether found Papyrus structs with invalid linkage are printed to the plugin's log file.
+bLogInvalidLinkedPapyrusStructs = true
+
+# [Default: false] Whether found delayed Papyrus functions are printed to the plugin's log file.
+# Delayed functions are ones that synchronize their execution to the game's framerate.
+# This results in them always having to wait at least one frame for the execution to even start.
+# Hydra basically removes delayed functions completely, by making them be called directly on the current thread,
+# guarded by a global mutex.
+bLogDelayedPapyrusFunctions = false
+
+# [Default: false] Whether found latent Papyrus functions are printed to the plugin's log file.
+# Latent functions are ones that yield their execution for potentially several game frames.
+bLogLatentPapyrusFunctions = false
+
+# [Default: true] Whether found duplicate editor IDs are printed to the plugin's log file.
+bLogDuplicateEditorIds = true
+
+# [Default: false] Whether the command runner prints executed commands to the game's console output.
+bPrintCommandRunnerCommands = false
+
+# [Default: false] Whether the requirement runner adds a cancel button for its message boxes.
+bAddRequirementRunnerCancelButton = false
+
+# [Default: true] Whether incompatibilities with Baka Framework and this plugin are shown to the user.
+bShowBakaFrameworkIncompatibilities = true

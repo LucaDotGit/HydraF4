@@ -1,0 +1,16 @@
+{
+	/*
+	"objects": [
+		{
+			"boundObject": "@Form:'MyScript'|'Fallout4.esm'|0x000014"
+		},
+		{
+			"boundObject": "@Form:'MyNamespace:MyScript'|'Fallout4.esm'|0x000014",
+			"properties": {
+				"MyStringProperty": "Hello, World!",
+				"MyScriptObject": "@Form:'Actor'|'Fallout4.esm'|0x000014"
+			}
+		}
+	]
+	*/
+}

@@ -1,0 +1,1 @@
+Scriptname NavMeshObstacleManager extends Form Hidden Native

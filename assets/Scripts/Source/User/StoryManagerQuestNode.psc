@@ -1,0 +1,1 @@
+Scriptname StoryManagerQuestNode extends Form Hidden Native

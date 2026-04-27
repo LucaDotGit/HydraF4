@@ -1,0 +1,1 @@
+Scriptname StoryManagerEventNode extends Form Hidden Native

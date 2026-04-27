@@ -1,0 +1,25 @@
+{
+	/*
+	"name": "My Mod",
+	"requirements": {
+		"gameVersion": "1.10.163.0",
+		"gamePlugins": [
+			"Fallout4.esm"
+		],
+		"xseVersion": "0.6.23.0",
+		"xsePlugins": [
+			{
+				"name": "MyPlugin",
+				"version": "1.0.0.0"
+			}
+		],
+		"modules": [
+			{
+				"name": "MyModule.dll",
+				"fileVersion": "1.0.0.0",
+				"productVersion": "1.0.0.0"
+			}
+		]
+	}
+	*/
+}

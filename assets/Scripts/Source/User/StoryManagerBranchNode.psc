@@ -1,0 +1,1 @@
+Scriptname StoryManagerBranchNode extends Form Hidden Native

@@ -1,0 +1,30 @@
+{
+	/*
+	"replacedFunctions": [
+		{
+			"oldScriptName": "MyOldScript",
+			"oldFunctionName": "MyFunction",
+			"oldStateName": "",
+			"newScriptName": "MyNewScript",
+			"newFunctionName": "MyOldScript_MyFunction_Hook",
+			"newStateName": ""
+		}
+	],
+	"replacedGetterFunctions": [
+		{
+			"oldScriptName": "MyNamespace:MyOldScript",
+			"oldPropertyName": "MyProperty",
+			"newScriptName": "MyNamespace:MyNewScript",
+			"newPropertyName": "MyOldScript_MyProperty_Hook"
+		}
+	],
+	"replacedSetterFunctions": [
+		{
+			"oldScriptName": "MyNamespace:MyOldScript",
+			"oldPropertyName": "MyProperty",
+			"newScriptName": "MyNamespace:MyNewScript",
+			"newPropertyName": "MyOldScript_MyProperty_Hook"
+		}
+	]
+	*/
+}

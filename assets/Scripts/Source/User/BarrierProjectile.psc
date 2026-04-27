@@ -1,0 +1,1 @@
+Scriptname BarrierProjectile extends ObjectReference Hidden Native

@@ -1,0 +1,1 @@
+Scriptname PlacedHazard extends ObjectReference Hidden Native

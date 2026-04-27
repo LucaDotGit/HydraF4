@@ -1,0 +1,1 @@
+Scriptname ObjectVisibilityManager extends Form Hidden Native

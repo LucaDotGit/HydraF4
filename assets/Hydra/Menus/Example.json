@@ -1,0 +1,24 @@
+{
+	/*
+	"menus": [
+		{
+			"menuName": "MyMenu",
+			"menuPath": "MyMenu.swf",
+			"menuRoot": "root1",
+			"menuFlags": [
+				"PauseGame",
+				"UseCursor",
+				"UseMenuContext"
+			],
+			"menuDepth": 6
+		}
+	]
+	"assets": [
+		{
+			"menuName": "HUDMenu",
+			"assetPath": "MyAsset.swf",
+			"assetRoot": "root1"
+		}
+	]
+	*/
+}

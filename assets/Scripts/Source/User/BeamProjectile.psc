@@ -1,0 +1,1 @@
+Scriptname BeamProjectile extends ObjectReference Hidden Native
