@@ -6,7 +6,7 @@ Scriptname Hydra:Forms:ConstructibleObject Const Hidden Native
 
 Struct ComponentEntry
 	Component kComponent
-	int iCount
+	int iCount = 1
 EndStruct
 
 Form Function GetCreatedObject(ConstructibleObject akObject) Global Native

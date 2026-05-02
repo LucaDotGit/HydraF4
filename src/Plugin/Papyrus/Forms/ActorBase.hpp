@@ -6,6 +6,7 @@ namespace Plugin::Papyrus::Forms::ActorBase
 
 	using FactionRank = RE::BSScript::StructWrapper<SCRIPT_NAME, "FactionRank">;
 	using PerkRank = RE::BSScript::StructWrapper<SCRIPT_NAME, "PerkRank">;
+	using SkinTintData = RE::BSScript::StructWrapper<SCRIPT_NAME, "SkinTintData">;
 
 	void RegisterFunctions(REX::NotNull<RE::BSScript::IVirtualMachine*> a_vm);
 }

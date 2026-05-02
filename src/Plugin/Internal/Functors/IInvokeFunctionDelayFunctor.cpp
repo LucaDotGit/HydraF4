@@ -90,9 +90,8 @@ namespace Plugin::Internal::Functors
 
 		_tempShouldResume = false;
 
-		const auto hasReturned = _hasReturned.load(std::memory_order_acquire);
-		if (hasReturned) {
-			_tempShouldResume = hasReturned;
+		if (_hasReturned.load(std::memory_order_acquire)) {
+			_tempShouldResume = true;
 			return true;
 		}
 

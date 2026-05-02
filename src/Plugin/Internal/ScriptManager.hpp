@@ -36,7 +36,6 @@ namespace Plugin::Internal
 		void OnNewOrPostLoadGame(bool a_isSucceeded);
 
 	private:
-		REX::NotNull<std::shared_ptr<SettingsManager>> _settingsManager;
 		REX::NotNull<std::shared_ptr<Script::ScriptDumper>> _scriptDumper;
 		REX::NotNull<std::shared_ptr<Script::ScriptVariantMap>> _memoryMap;
 		REX::NotNull<std::shared_ptr<Script::ScriptVariantSet>> _memorySet;

@@ -7,13 +7,13 @@ Scriptname Hydra:Colors Const Hidden Native
 Import Hydra:Operator
 
 Struct Color
-	int iRed
-	int iGreen
-	int iBlue
-	int iAlpha
+	int iRed = 0
+	int iGreen = 0
+	int iBlue = 0
+	int iAlpha = 255
 EndStruct
 
-Color Function Create(int aiRed = 0, int aiGreen = 0, int aiBlue = 0, int aiAlpha = 0) Global
+Color Function Create(int aiRed = 0, int aiGreen = 0, int aiBlue = 0, int aiAlpha = 255) Global
 	Color kColor = new Color
 	kColor.iRed = aiRed
 	kColor.iGreen = aiGreen
@@ -22,8 +22,14 @@ Color Function Create(int aiRed = 0, int aiGreen = 0, int aiBlue = 0, int aiAlph
 	return kColor
 EndFunction
 
-Color Function FromHex(int aiValue) Global Native
-int Function ToHex(Color akColor) Global Native
+Color Function FromHexRgb(int aiValue) Global Native
+int Function ToHexRgb(Color akColor) Global Native
 
-Color Function FromString(string asValue) Global Native
-string Function ToString(Color akColor) Global Native
+Color Function FromHexRgba(int aiValue) Global Native
+int Function ToHexRgba(Color akColor) Global Native
+
+Color Function FromRgbString(string asValue) Global Native
+string Function ToRgbString(Color akColor) Global Native
+
+Color Function FromRgbaString(string asValue) Global Native
+string Function ToRgbaString(Color akColor) Global Native

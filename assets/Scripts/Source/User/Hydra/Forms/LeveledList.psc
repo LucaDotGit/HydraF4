@@ -9,14 +9,14 @@ Scriptname Hydra:Forms:LeveledList Const Hidden Native
 
 Struct LeveledEntry
 	Form kObject
-	int iCount
-	int iLevel
-	int iChanceNone
+	int iCount = 1
+	int iLevel = 1
+	int iChanceNone = 0
 EndStruct
 
 Struct KeywordEntry
 	Keyword kKeyword
-	int iChance
+	int iChance = 0
 EndStruct
 
 int Function GetMaxUseAllCount(Form akLeveledList) Global Native

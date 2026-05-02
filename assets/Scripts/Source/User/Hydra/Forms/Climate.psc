@@ -6,7 +6,7 @@ Scriptname Hydra:Forms:Climate Const Hidden Native
 
 Struct WeatherEntry
 	Weather kWeatherType
-	float fChance
+	float fChance = 0.0
 	GlobalVariable kChanceGlobal
 EndStruct
 

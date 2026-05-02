@@ -22,6 +22,18 @@ Scriptname Hydra:Forms:Form Const Hidden Native
 	  see: https://github.com/powerof3/CommonLibSSE/blob/e3626d228d60b92a82410accd475bffdd7245653/include/RE/T/TESObjectREFR.h#L146.
 /;
 
+Struct ContainerEntry
+	Form kItem
+	int iCount = 1
+	Form kOwner
+	int iOwnerRank = 0
+EndStruct
+
+Struct PropertyEntry
+	ActorValue kValueHolder
+	float iValue = 0.0
+EndStruct
+
 ; The output may be `none` if no form factory is available for a type.
 Form Function Create(int aiType) Global Native
 Form Function CreateAndCopy(Form akForm) Global Native
@@ -169,21 +181,9 @@ bool Function SetMaterialSwap(Form akForm, MatSwap akValue) Global Native
 float Function GetMaterialSwapColorRemapIndex(Form akForm) Global Native
 bool Function SetMaterialSwapColorRemapIndex(Form akForm, float afValue) Global Native
 
-Struct ContainerEntry
-	Form kItem
-	int iCount
-	Form kOwner
-	int iOwnerRank
-EndStruct
-
 ; For:	ActorBase, Container
 ContainerEntry[] Function GetContainerItems(Form akForm) Global Native
 bool Function SetContainerItems(Form akForm, ContainerEntry[] akValues) Global Native
-
-Struct PropertyEntry
-	ActorValue kValueHolder
-	float iValue
-EndStruct
 
 ; For:	Activator, ActorBase, Class, Container, Light, Race, Static
 PropertyEntry[] Function GetProperties(Form akForm) Global Native

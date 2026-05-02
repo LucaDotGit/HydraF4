@@ -17,6 +17,10 @@ namespace Plugin::Internal
 		  _printCommandRunnerCommandsSetting(std::make_shared<REX::Toml::Bool>("Debug"s, "bPrintCommandRunnerCommands"s, false)),
 		  _addRequirementRunnerCancelButtonSetting(std::make_shared<REX::Toml::Bool>("Debug"s, "bAddRequirementRunnerCancelButton"s, false)),
 		  _showBakaFrameworkIncompatibilitiesSetting(std::make_shared<REX::Toml::Bool>("Debug"s, "bShowBakaFrameworkIncompatibilities"s, true)),
+		  _scriptTaskletPatch_IncludedScriptNamePatternsSetting(std::make_shared<REX::Toml::StringArray>("Patches"s, "kScriptTaskletPatch_IncludedScriptNamePatterns"s)),
+		  _scriptTaskletPatch_ExcludedScriptNamePatternsSetting(std::make_shared<REX::Toml::StringArray>("Patches"s, "kScriptTaskletPatch_ExcludedScriptNamePatterns"s)),
+		  _scriptTaskletPatch_IncludedFunctionNamePatternsSetting(std::make_shared<REX::Toml::StringArray>("Patches"s, "kScriptTaskletPatch_IncludedFunctionNamePatterns"s)),
+		  _scriptTaskletPatch_ExcludedFunctionNamePatternsSetting(std::make_shared<REX::Toml::StringArray>("Patches"s, "kScriptTaskletPatch_ExcludedFunctionNamePatterns"s)),
 		  _settings(std::move(a_mainFilePath), std::move(a_customFilePath))
 	{
 		const auto settings = std::initializer_list<const REX::NotNull<std::shared_ptr<REX::ISetting>>>{
@@ -31,7 +35,11 @@ namespace Plugin::Internal
 			_logDuplicateEditorIdsSetting,
 			_printCommandRunnerCommandsSetting,
 			_addRequirementRunnerCancelButtonSetting,
-			_showBakaFrameworkIncompatibilitiesSetting
+			_showBakaFrameworkIncompatibilitiesSetting,
+			_scriptTaskletPatch_IncludedScriptNamePatternsSetting,
+			_scriptTaskletPatch_ExcludedScriptNamePatternsSetting,
+			_scriptTaskletPatch_IncludedFunctionNamePatternsSetting,
+			_scriptTaskletPatch_ExcludedFunctionNamePatternsSetting
 		};
 
 		_settings.AddRange(settings);

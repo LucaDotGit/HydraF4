@@ -304,13 +304,23 @@ namespace Plugin::Papyrus::Forms::Actor
 			return;
 		}
 
-		constexpr auto RELOAD_ALL = false;
-		constexpr auto QUEUE_RESET = true;
+		static_assert(RE::RESET_3D_FLAGS::kNone < RE::RESET_3D_FLAGS::kAll);
+		auto excludedFlags = REX::EnumSet(RE::RESET_3D_FLAGS::kAll);
 
-		auto additionalFlags = REX::EnumSet(RE::RESET_3D_FLAGS::kNone);
-		auto excludedFlags = REX::EnumSet(a_flags);
+		if (a_flags < RE::RESET_3D_FLAGS::kNone || a_flags > RE::RESET_3D_FLAGS::kAll) [[unlikely]] {
+			excludedFlags.store(RE::RESET_3D_FLAGS::kNone);
+		}
+		else {
+			excludedFlags.reset(a_flags);
+		}
 
-		a_actor->Reset3D(RELOAD_ALL, additionalFlags.get(), QUEUE_RESET, excludedFlags.get());
+		F4SE::GetTaskInterface()->AddTask([actorRef = RE::NiPointer(a_actor), excludedFlags]() {
+			constexpr auto RELOAD_ALL = false;
+			constexpr auto QUEUE_RESET = false;
+			constexpr auto ADDITIONAL_FLAGS = REX::EnumSet(RE::RESET_3D_FLAGS::kNone);
+
+			actorRef->Reset3D(RELOAD_ALL, ADDITIONAL_FLAGS.get(), QUEUE_RESET, excludedFlags.get());
+		});
 	}
 
 	static RE::SIT_SLEEP_STATE GetSitSleepState(RE::BSScript::IVirtualMachine& a_vm, RE::BSScript::StackID a_stackId, RE::BSScript::StaticTag /*a_staticTag*/,

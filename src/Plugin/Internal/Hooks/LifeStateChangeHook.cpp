@@ -9,10 +9,7 @@ namespace Plugin::Internal::Hooks::LifeStateChangeHook::Impl
 		std::derived_from<T, RE::Actor> &&
 		!std::is_pointer_v<T> &&
 		!std::is_reference_v<T>;
-}
 
-namespace Plugin::Internal::Hooks::LifeStateChangeHook
-{
 	template <Impl::HookConstraint T>
 	class Hook final
 	{
@@ -64,6 +61,7 @@ namespace Plugin::Internal::Hooks::LifeStateChangeHook
 				.oldState = oldState,
 				.newState = a_lifeState
 			};
+
 			F4SE::GetTaskInterface()->AddTask([&lifeStateChangeEventSource, lifeStateChangeEvent]() {
 				lifeStateChangeEventSource->Notify(lifeStateChangeEvent);
 			});
@@ -71,10 +69,13 @@ namespace Plugin::Internal::Hooks::LifeStateChangeHook
 
 		inline static constinit auto SetLifeStateHook = std::shared_ptr<REL::HookVft<decltype(&Hook::SetLifeState)>>();
 	};
+}
 
+namespace Plugin::Internal::Hooks::LifeStateChangeHook
+{
 	void OnXseLoad(REL::HookStore& a_hookStore)
 	{
-		Hook<RE::Actor>::Setup(a_hookStore);
-		Hook<RE::PlayerCharacter>::Setup(a_hookStore);
+		Impl::Hook<RE::Actor>::Setup(a_hookStore);
+		Impl::Hook<RE::PlayerCharacter>::Setup(a_hookStore);
 	}
 }

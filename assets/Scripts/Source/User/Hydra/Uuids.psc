@@ -5,10 +5,10 @@ Scriptname Hydra:Uuids Const Hidden Native
 /;
 
 Struct Uuid
-	int iData01
-	int iData02
-	int iData03
-	int iData04
+	int iData01 = 0
+	int iData02 = 0
+	int iData03 = 0
+	int iData04 = 0
 EndStruct
 
 Uuid Function Generate() Global Native

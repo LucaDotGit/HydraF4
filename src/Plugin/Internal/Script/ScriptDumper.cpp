@@ -1,6 +1,7 @@
 #include "Plugin/Internal/Script/ScriptDumper.hpp"
 
 #include "Plugin/Internal/Patches/ScriptFunctionTaskletPatch.hpp"
+#include "Plugin/Internal/PatchesManager.hpp"
 #include "Plugin/Internal/SettingsManager.hpp"
 
 namespace Plugin::Internal::Script::Impl
@@ -70,7 +71,7 @@ namespace Plugin::Internal::Script::Impl
 				continue;
 			}
 
-			const auto* nativeFunctionPtr = reinterpret_cast<const RE::BSScript::NF_util::NativeFunctionBase*>(functionPtr.get());
+			const auto nativeFunctionPtr = RE::reinterpret_pointer_cast<RE::BSScript::NF_util::NativeFunctionBase>(functionPtr);
 			if (!nativeFunctionPtr) {
 				continue;
 			}
@@ -85,7 +86,7 @@ namespace Plugin::Internal::Script::Impl
 				continue;
 			}
 
-			if (nativeFunctionPtr->CanBeCalledFromTasklets() && !Patches::ScriptFunctionTaskletPatch::IsDelayedFunction(scriptName, functionName)) {
+			if (nativeFunctionPtr->CanBeCalledFromTasklets()) {
 				continue;
 			}
 
@@ -122,7 +123,7 @@ namespace Plugin::Internal::Script::Impl
 				continue;
 			}
 
-			const auto* nativeFunctionPtr = reinterpret_cast<const RE::BSScript::NF_util::NativeFunctionBase*>(functionPtr.get());
+			const auto nativeFunctionPtr = RE::reinterpret_pointer_cast<RE::BSScript::NF_util::NativeFunctionBase>(functionPtr);
 			if (!nativeFunctionPtr || !nativeFunctionPtr->GetIsLatent()) {
 				continue;
 			}

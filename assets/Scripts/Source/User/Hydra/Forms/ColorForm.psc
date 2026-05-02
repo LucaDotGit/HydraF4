@@ -9,9 +9,6 @@ Import Hydra:Colors
 Color Function GetColor(ColorForm akColorForm) Global Native
 Function SetColor(ColorForm akColorForm, Color akValue) Global Native
 
-int Function GetHexColor(ColorForm akColorForm) Global Native
-Function SetHexColor(ColorForm akColorForm, int aiValue) Global Native
-
 float Function GetRemappingIndex(ColorForm akColorForm) Global Native
 Function SetRemappingIndex(ColorForm akColorForm, float afValue) Global Native
 

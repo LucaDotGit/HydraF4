@@ -32,7 +32,7 @@ namespace Plugin::Internal::Save
 			}
 
 			auto eventHandler = std::shared_ptr<const Events::IEventHandler>();
-			if (!std::invoke(*eventFunctor->GetLoadCallback(), a_stream, eventHandler)) [[unlikely]] {
+			if (!std::invoke(*(eventFunctor->GetLoadCallback()), a_stream, eventHandler)) [[unlikely]] {
 				REX::Assert(false);
 				return false;
 			}
@@ -71,7 +71,7 @@ namespace Plugin::Internal::Save
 				return false;
 			}
 
-			if (!std::invoke(*eventFunctor->GetSaveCallback(), a_stream, a_eventHandler)) [[unlikely]] {
+			if (!std::invoke(*(eventFunctor->GetSaveCallback()), a_stream, a_eventHandler)) [[unlikely]] {
 				REX::Assert(false);
 				return false;
 			}

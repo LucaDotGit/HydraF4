@@ -23,17 +23,16 @@ namespace Plugin::Papyrus::Forms::ObjectReference::Impl
 		return !a_ref->IsPlayerRef() || std::abs(a_newPosition) <= RE::GridCellArray::CELL_SIZE;
 	}
 
-	static void UpdatePosition(RE::TESObjectREFR* a_ref)
+	static void UpdatePosition(RE::TESObjectREFR& a_ref)
 	{
-		REX::Assert(a_ref != nullptr);
-
-		F4SE::GetTaskInterface()->AddTask([refHandle = a_ref->GetHandle()]() {
-			if (!refHandle) {
+		F4SE::GetTaskInterface()->AddTask([ref = RE::NiPointer(std::addressof(a_ref))]() {
+			if (!ref) [[unlikely]] {
+				REX::Assert(false);
 				return;
 			}
 
 			constexpr auto WARP = true;
-			refHandle->Update3DPosition(WARP);
+			ref->Update3DPosition(WARP);
 		});
 	}
 }
@@ -113,7 +112,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		}
 
 		a_ref->SetPositionX(a_value);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -132,7 +131,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		}
 
 		a_ref->ModPositionX(a_value);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -163,7 +162,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		}
 
 		a_ref->SetPositionY(a_value);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -182,7 +181,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		}
 
 		a_ref->ModPositionY(a_value);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -213,7 +212,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		}
 
 		a_ref->SetPositionZ(a_value);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -232,7 +231,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		}
 
 		a_ref->ModPositionZ(a_value);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -258,7 +257,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		}
 
 		a_ref->SetAngleX(a_value);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -273,7 +272,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		}
 
 		a_ref->ModAngleX(a_value);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -299,7 +298,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		}
 
 		a_ref->SetAngleY(a_value);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -314,7 +313,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		}
 
 		a_ref->ModAngleY(a_value);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -340,7 +339,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		}
 
 		a_ref->SetAngleZ(a_value);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -355,7 +354,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		}
 
 		a_ref->ModAngleZ(a_value);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -395,7 +394,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		}
 
 		a_ref->SetPosition(newPosition);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -428,7 +427,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 		const auto newRotation = Vector3Struct::ToNiPoint3A(a_rotation.value());
 
 		a_ref->SetAngle(newRotation);
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 
 		return true;
 	}
@@ -509,7 +508,7 @@ namespace Plugin::Papyrus::Forms::ObjectReference
 			a_ref->SetAngleY(0.0_f32);
 		}
 
-		Impl::UpdatePosition(a_ref);
+		Impl::UpdatePosition(*a_ref);
 		return true;
 	}
 

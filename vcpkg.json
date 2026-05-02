@@ -1,8 +1,8 @@
 {
 	"$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
 	"dependencies": [
-		"fmt",
 		"spdlog",
+		"fmt",
 		"simpleini",
 		"toml11",
 		"nlohmann-json",

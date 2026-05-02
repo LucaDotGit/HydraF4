@@ -50,3 +50,38 @@ bAddRequirementRunnerCancelButton = false
 
 # [Default: true] Whether incompatibilities with Baka Framework and this plugin are shown to the user.
 bShowBakaFrameworkIncompatibilities = true
+
+
+[Patches]
+
+# The script name patterns to include in the script tasklet patch.
+kScriptTaskletPatch_IncludedScriptNamePatterns = [
+	"Hydra:*"
+]
+
+# The script name patterns to exclude from the script tasklet patch.
+kScriptTaskletPatch_ExcludedScriptNamePatterns = []
+
+# The function name patterns to include in the script tasklet patch.
+kScriptTaskletPatch_IncludedFunctionNamePatterns = [
+	"Can*",
+	"Contains*",
+	"Count*",
+	"Does*",
+	"Find*",
+	"Get*",
+	"Has*",
+	"Is*",
+	"Lookup*",
+	"Match*",
+	"Query*",
+	"Random*",
+	"Read*",
+	"Search*",
+	"TryGet*",
+	"TryToGet*",
+	"Would*"
+]
+
+# The function name patterns to exclude from the script tasklet patch.
+kScriptTaskletPatch_ExcludedFunctionNamePatterns = []

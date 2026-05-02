@@ -1,6 +1,6 @@
 #include "Plugin/Internal/Patches/ScriptTypePreloadPatch.hpp"
 
-namespace Plugin::Internal::Patches::ScriptTypePreloadPatch::Impl
+namespace Plugin::Internal::Patches::Impl
 {
 	[[nodiscard]] static bool LoadAndLinkScriptType(RE::BSScript::IVirtualMachine& a_scriptVM, const RE::BSFixedString& a_typeName)
 	{
@@ -97,9 +97,10 @@ namespace Plugin::Internal::Patches::ScriptTypePreloadPatch::Impl
 	}
 }
 
-namespace Plugin::Internal::Patches::ScriptTypePreloadPatch
+namespace Plugin::Internal::Patches
 {
-	void OnGameDataReady()
+	// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+	void ScriptTypePreloadPatch::OnGameDataReady()
 	{
 		const auto internalVM = RE::GameVM::GetInternalVM();
 		if (!internalVM) [[unlikely]] {

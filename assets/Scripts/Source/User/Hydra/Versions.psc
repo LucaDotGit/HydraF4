@@ -12,10 +12,10 @@ Scriptname Hydra:Versions Const Hidden Native
 /;
 
 Struct Version
-	int iMajor
-	int iMinor
-	int iPatch
-	int iBuild
+	int iMajor = 0
+	int iMinor = 0
+	int iPatch = 0
+	int iBuild = 0
 EndStruct
 
 Version Function Create(int aiMajor = 0, int aiMinor = 0, int aiPatch = 0, int aiBuild = 0) Global

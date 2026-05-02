@@ -41,8 +41,7 @@ namespace Plugin::Papyrus::Time
 			return 0.0_f32;
 		}
 
-		const auto deltaTime = timer->GetDeltaTime();
-		return deltaTime.count();
+		return std::atomic_ref(timer->delta).load(std::memory_order_acquire);
 	}
 
 	static REX::Float32 GetElapsedTime(RE::BSScript::StaticTag /*a_staticTag*/)
@@ -53,31 +52,31 @@ namespace Plugin::Papyrus::Time
 			return 0.0_f32;
 		}
 
-		const auto startTimeMilliseconds = timer->GetInitTime();
-		const auto startTimeSeconds = std::chrono::duration_cast<RE::BSTimer::Seconds>(startTimeMilliseconds);
-		return startTimeSeconds.count();
+		const auto initTime = std::atomic_ref(timer->highPrecisionInitTime).load(std::memory_order_acquire);
+		const auto initTimeMillis = RE::BSTimer::Milliseconds(initTime);
+		return std::chrono::duration_cast<RE::BSTimer::Seconds>(initTimeMillis).count();
 	}
 
 	static REX::Float32 GetTimeMultiplier(RE::BSScript::StaticTag /*a_staticTag*/)
 	{
-		return RE::BSTimer::QGlobalTimeMultiplier();
+		return std::atomic_ref(RE::BSTimer::QGlobalTimeMultiplier()).load(std::memory_order_acquire);
 	}
 
-	static std::uint32_t GetDefaultTimeScale(RE::BSScript::StaticTag /*a_staticTag*/)
+	static REX::Float32 GetDefaultTimeScale(RE::BSScript::StaticTag /*a_staticTag*/)
 	{
-		return static_cast<std::uint32_t>(RE::Calendar::DEFAULT_TIME_SCALE.count());
+		return RE::Calendar::DEFAULT_TIME_SCALE.count();
 	}
 
-	static std::uint32_t GetTimeScale(RE::BSScript::StaticTag /*a_staticTag*/)
+	static REX::Float32 GetTimeScale(RE::BSScript::StaticTag /*a_staticTag*/)
 	{
 		const auto* calendar = RE::Calendar::GetSingleton();
 		if (!calendar) [[unlikely]] {
 			REX::Assert(false);
-			return static_cast<std::uint32_t>(RE::Calendar::DEFAULT_TIME_SCALE.count());
+			return RE::Calendar::DEFAULT_TIME_SCALE.count();
 		}
 
 		const auto timeScale = calendar->GetTimeScale();
-		return static_cast<std::uint32_t>(timeScale.count());
+		return timeScale.count();
 	}
 
 	static std::uint32_t GetDayOfWeek(RE::BSScript::StaticTag /*a_staticTag*/,
@@ -340,9 +339,9 @@ namespace Plugin::Papyrus::Time
 
 	void RegisterFunctions(REX::NotNull<RE::BSScript::IVirtualMachine*> a_vm)
 	{
-		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, GetDeltaTime);
-		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, GetElapsedTime);
-		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, GetTimeMultiplier);
+		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, GetDeltaTime);
+		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, GetElapsedTime);
+		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, GetTimeMultiplier);
 		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, GetDefaultTimeScale);
 		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, GetTimeScale);
 		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, GetDayOfWeek);

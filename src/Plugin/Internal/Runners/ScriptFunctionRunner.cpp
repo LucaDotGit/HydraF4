@@ -319,8 +319,8 @@ namespace Plugin::Internal::Runners
 				functionBoundObject, functionObjectHandle);
 		}
 
-		const auto paramsStructName = std::invoke(*eventFunctorData->GetEventParamsNameCallback());
-		const auto argsStructName = std::invoke(*eventFunctorData->GetEventArgsNameCallback());
+		const auto paramsStructName = std::invoke(*(eventFunctorData->GetEventParamsNameCallback()));
+		const auto argsStructName = std::invoke(*(eventFunctorData->GetEventArgsNameCallback()));
 
 		auto paramTypeInfo = RE::BSTSmartPointer<RE::BSScript::StructTypeInfo>();
 		if (!a_scriptVM->GetScriptStructType(RE::BSFixedString(paramsStructName), paramTypeInfo) || !paramTypeInfo) [[unlikely]] {
@@ -404,8 +404,8 @@ namespace Plugin::Internal::Runners
 				functionEventName);
 		}
 
-		const auto paramsStructName = std::invoke(*eventFunctorData->GetEventParamsNameCallback());
-		const auto argsStructName = std::invoke(*eventFunctorData->GetEventArgsNameCallback());
+		const auto paramsStructName = std::invoke(*(eventFunctorData->GetEventParamsNameCallback()));
+		const auto argsStructName = std::invoke(*(eventFunctorData->GetEventArgsNameCallback()));
 
 		auto paramTypeInfo = RE::BSTSmartPointer<RE::BSScript::StructTypeInfo>();
 		if (!a_scriptVM->GetScriptStructType(RE::BSFixedString(paramsStructName), paramTypeInfo) || !paramTypeInfo) [[unlikely]] {

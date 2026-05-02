@@ -9,10 +9,7 @@ namespace Plugin::Internal::Hooks::ButtonUpDownHook::Impl
 		std::derived_from<T, RE::BSInputEventReceiver> &&
 		!std::is_pointer_v<T> &&
 		!std::is_reference_v<T>;
-}
 
-namespace Plugin::Internal::Hooks::ButtonUpDownHook
-{
 	template <Impl::HookConstraint T>
 	class Hook final
 	{
@@ -78,9 +75,12 @@ namespace Plugin::Internal::Hooks::ButtonUpDownHook
 
 		inline static constinit auto PerformInputProcessingHook = std::shared_ptr<REL::HookVft<decltype(&Hook::PerformInputProcessing)>>();
 	};
+}
 
+namespace Plugin::Internal::Hooks::ButtonUpDownHook
+{
 	void OnXseLoad(REL::HookStore& a_hookStore)
 	{
-		Hook<RE::MenuControls>::Setup(a_hookStore);
+		Impl::Hook<RE::MenuControls>::Setup(a_hookStore);
 	}
 }

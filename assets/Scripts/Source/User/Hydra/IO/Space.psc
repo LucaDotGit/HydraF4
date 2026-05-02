@@ -1,10 +1,7 @@
 Scriptname Hydra:IO:Space Const Hidden Native
 
 ;/
-	Provides functions for retrieving space information.
-
-	Notes:
-	- These functions are only valid within the game's root- and its sub-directories.
+	Provides functions for retrieving file system space information.
 /;
 
 Import Hydra:Int64

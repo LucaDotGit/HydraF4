@@ -17,8 +17,8 @@ float Function GetDeltaTime() Global Native
 float FUnction GetElapsedTime() Global Native
 float Function GetTimeMultiplier() Global Native
 
-int Function GetDefaultTimeScale() Global Native
-int Function GetTimeScale() Global Native
+float Function GetDefaultTimeScale() Global Native
+float Function GetTimeScale() Global Native
 
 int Function GetDayOfWeek(int aiYear, int aiMonth, int aiDay) Global Native
 int Function GetDayOfWeek_NoLeapYear(int aiMonth, int aiDay) Global Native

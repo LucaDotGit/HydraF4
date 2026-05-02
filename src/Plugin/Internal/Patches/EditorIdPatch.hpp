@@ -1,7 +1,20 @@
 #pragma once
 
-namespace Plugin::Internal::Patches::EditorIdPatch
+namespace Plugin::Internal::Patches
 {
-	void OnXseLoad(REL::HookStore& a_hookStore);
-	void OnGameDataReady();
+	class EditorIdPatch final
+	{
+	public:
+		EditorIdPatch() = default;
+		~EditorIdPatch() noexcept = default;
+
+		EditorIdPatch(const EditorIdPatch&) = delete;
+		EditorIdPatch(EditorIdPatch&&) = delete;
+
+		EditorIdPatch& operator=(const EditorIdPatch&) = delete;
+		EditorIdPatch& operator=(EditorIdPatch&&) = delete;
+
+		void OnXseLoad(REL::HookStore& a_hookStore);
+		void OnGameDataReady();
+	};
 }

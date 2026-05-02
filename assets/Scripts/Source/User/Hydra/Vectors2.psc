@@ -5,8 +5,8 @@ Scriptname Hydra:Vectors2 Const Hidden Native
 /;
 
 Struct Vector2
-	float fX
-	float fY
+	float fX = 0.0
+	float fY = 0.0
 EndStruct
 
 Vector2 Function Create(float afX = 0.0, float afY = 0.0) Global

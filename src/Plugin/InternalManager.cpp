@@ -26,7 +26,7 @@ namespace Plugin
 			  std::filesystem::path(_pluginsDirectoryPath / REX::Format("{}.toml"sv, _pluginName), std::filesystem::path::generic_format),
 			  std::filesystem::path(_pluginsDirectoryPath / REX::Format("{}_Custom.toml"sv, _pluginName), std::filesystem::path::generic_format))),
 		  _hooksManager(std::make_shared<Internal::HooksManager>()),
-		  _patchesManager(std::make_shared<Internal::PatchesManager>()),
+		  _patchesManager(std::make_shared<Internal::PatchesManager>(_settingsManager)),
 		  _functorsManager(std::make_shared<Internal::FunctorsManager>()),
 		  _gameManager(std::make_shared<Internal::GameManager>(_settingsManager)),
 		  _gameStartedManager(std::make_shared<Internal::GameStartedManager>()),

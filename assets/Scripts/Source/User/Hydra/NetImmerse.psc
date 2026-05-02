@@ -26,7 +26,7 @@ EndStruct
 Struct NiTransform
 	NiMatrix4x3 kRotation
 	Vector3 kPosition
-	float fScale
+	float fScale = 1.0
 EndStruct
 
 bool Function ContainsNode(ObjectReference akRef, string asNodeName, bool abFirstPerson = false) Global Native

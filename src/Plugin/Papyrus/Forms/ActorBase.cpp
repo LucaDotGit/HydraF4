@@ -10,6 +10,63 @@ namespace Plugin::Papyrus::Forms::ActorBase::Impl
 	static constexpr auto FACTION_KEY = "kFaction"sv;
 	static constexpr auto PERK_KEY = "kPerk"sv;
 	static constexpr auto RANK_KEY = "iRank"sv;
+	static constexpr auto COLOR_KEY = "kColor"sv;
+	static constexpr auto STRENGTH_KEY = "fStrength"sv;
+
+	static constexpr auto ACTOR_SKIN_TINT_INTENSITY_DIVIDER = 100.0_f32;
+
+	[[nodiscard]] static auto GetSkinTintId(const RE::TESNPC& a_actorBase) -> std::optional<std::uint16_t>
+	{
+		const auto* actorRace = a_actorBase.formRace;
+		if (!actorRace) {
+			return std::nullopt;
+		}
+
+		const auto actorSex = a_actorBase.GetSex();
+		if (actorSex == RE::SEX::kNone) {
+			return std::nullopt;
+		}
+
+		const auto* actorFaceData = actorRace->faceRelatedData[std::to_underlying(actorSex)];
+		if (!actorFaceData) {
+			return std::nullopt;
+		}
+
+		const auto* actorFaceTintTemplate = actorFaceData->tintingTemplate;
+		if (!actorFaceTintTemplate) {
+			return std::nullopt;
+		}
+
+		for (const auto* actorFaceTintTemplateGroup : actorFaceTintTemplate->groups) {
+			if (!actorFaceTintTemplateGroup) {
+				continue;
+			}
+
+			const auto* actorFaceTintTemplateEntry = actorFaceTintTemplateGroup->GetEntryBySlot(RE::BGSCharacterTint::EntrySlot::kSkinTone);
+			if (!actorFaceTintTemplateEntry) {
+				continue;
+			}
+
+			return actorFaceTintTemplateEntry->uniqueID;
+		}
+
+		return std::nullopt;
+	}
+
+	[[nodiscard]] static RE::BGSCharacterTint::Entry* GetSkinTintEntry(RE::TESNPC& a_actorBase, std::uint16_t a_skinTintId)
+	{
+		auto* actorTintingData = a_actorBase.tintingData;
+		if (!actorTintingData) {
+			return nullptr;
+		}
+
+		auto* actorTintingDataEntry = actorTintingData->GetEntryByID(a_skinTintId);
+		if (!actorTintingDataEntry) {
+			return nullptr;
+		}
+
+		return actorTintingDataEntry;
+	}
 }
 
 namespace Plugin::Papyrus::Forms::ActorBase
@@ -1236,40 +1293,82 @@ namespace Plugin::Papyrus::Forms::ActorBase
 		a_actorBase->SetFaceDetails(a_value);
 	}
 
-	static std::optional<ColorStruct> GetBodyTintColor(RE::BSScript::IVirtualMachine& a_vm, RE::BSScript::StackID a_stackId, RE::BSScript::StaticTag /*a_staticTag*/,
+	static SkinTintData GetSkinTintData(RE::BSScript::IVirtualMachine& a_vm, RE::BSScript::StackID a_stackId, RE::BSScript::StaticTag /*a_staticTag*/,
 		RE::TESNPC* a_actorBase)
 	{
 		if (!a_actorBase) [[unlikely]] {
 			a_vm.PostError(::Plugin::Internal::Script::ScriptErrors::ACTOR_BASE_NULL, a_stackId);
-			return std::nullopt;
+			return nullptr;
 		}
 
-		return ColorStruct{
-			.red = a_actorBase->bodyTintColorR,
-			.green = a_actorBase->bodyTintColorG,
-			.blue = a_actorBase->bodyTintColorB,
-			.alpha = a_actorBase->bodyTintColorA
-		};
+		const auto skinTintId = Impl::GetSkinTintId(*a_actorBase);
+		if (!skinTintId.has_value()) {
+			return nullptr;
+		}
+
+		const auto* skinTintEntry = Impl::GetSkinTintEntry(*a_actorBase, skinTintId.value());
+		if (!skinTintEntry) {
+			return nullptr;
+		}
+
+		const auto* skinTintPaletteEntry = RE::DynamicCast<const RE::BGSCharacterTint::PaletteEntry*>(skinTintEntry);
+		if (!skinTintPaletteEntry) {
+			return nullptr;
+		}
+
+		auto skinTintData = SkinTintData::Create();
+		skinTintData.Insert(Impl::COLOR_KEY, ColorStruct::FromHexBgr(skinTintPaletteEntry->tintingColor));
+		skinTintData.Insert(Impl::STRENGTH_KEY, static_cast<REX::Float32>(skinTintPaletteEntry->tintingValue) / Impl::ACTOR_SKIN_TINT_INTENSITY_DIVIDER);
+
+		return skinTintData;
 	}
 
-	static void SetBodyTintColor(RE::BSScript::IVirtualMachine& a_vm, RE::BSScript::StackID a_stackId, RE::BSScript::StaticTag /*a_staticTag*/,
+	static bool SetSkinTintData(RE::BSScript::IVirtualMachine& a_vm, RE::BSScript::StackID a_stackId, RE::BSScript::StaticTag /*a_staticTag*/,
 		RE::TESNPC* a_actorBase,
-		std::optional<ColorStruct> a_value)
+		SkinTintData a_value)
 	{
 		if (!a_actorBase) [[unlikely]] {
 			a_vm.PostError(::Plugin::Internal::Script::ScriptErrors::ACTOR_BASE_NULL, a_stackId);
-			return;
+			return false;
 		}
 
-		if (!a_value.has_value()) [[unlikely]] {
+		if (!a_value) [[unlikely]] {
 			a_vm.PostError(::Plugin::Internal::Script::ScriptErrors::STRUCT_NULL, a_stackId);
-			return;
+			return false;
 		}
 
-		a_actorBase->bodyTintColorR = a_value->red;
-		a_actorBase->bodyTintColorG = a_value->green;
-		a_actorBase->bodyTintColorB = a_value->blue;
-		a_actorBase->bodyTintColorA = a_value->alpha;
+		const auto skinTintId = Impl::GetSkinTintId(*a_actorBase);
+		if (!skinTintId.has_value()) {
+			return false;
+		}
+
+		const auto* skinTintEntry = Impl::GetSkinTintEntry(*a_actorBase, skinTintId.value());
+		const auto skinTintEntryStrength = skinTintEntry ? skinTintEntry->tintingValue : 0;
+
+		const auto* skinTintPaletteEntry = RE::DynamicCast<const RE::BGSCharacterTint::PaletteEntry*>(skinTintEntry);
+		const auto skinTintPaletteEntryColor = skinTintPaletteEntry ? skinTintPaletteEntry->tintingColor : 0;
+
+		const auto skinTintColor = a_value.Find<std::optional<ColorStruct>>(Impl::COLOR_KEY).value();
+		const auto skinTintStrength = a_value.FindOrDefault<float>(Impl::STRENGTH_KEY);
+
+		const auto newSkinTintColor = skinTintColor.has_value() ? skinTintColor->ToHexBgr() : skinTintPaletteEntryColor;
+		const auto newSkinTintStrength = skinTintStrength > 0.0f ? skinTintStrength : (static_cast<REX::Float32>(skinTintEntryStrength) / Impl::ACTOR_SKIN_TINT_INTENSITY_DIVIDER);
+
+		a_actorBase->SetTintingData(skinTintId.value(), newSkinTintStrength, newSkinTintColor);
+		a_actorBase->AddChange(RE::TESNPC::ChangeFlags::kFace);
+
+		if (!a_actorBase->IsPlayer()) {
+			return true;
+		}
+
+		auto* player = RE::PlayerCharacter::GetSingleton();
+		if (!player) [[unlikely]] {
+			REX::Assert(false);
+			return false;
+		}
+
+		player->SetTintingData(skinTintId.value(), newSkinTintStrength, newSkinTintColor);
+		return true;
 	}
 
 	static std::optional<std::vector<RE::BGSHeadPart*>> GetHeadParts(RE::BSScript::IVirtualMachine& a_vm, RE::BSScript::StackID a_stackId, RE::BSScript::StaticTag /*a_staticTag*/,
@@ -1495,10 +1594,10 @@ namespace Plugin::Papyrus::Forms::ActorBase
 		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, SetAttackDataTemplate);
 		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, GetKeywordsTemplate);
 		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, SetKeywordsTemplate);
-		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, GetDefaultTemplate);
-		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, SetDefaultTemplate);
-		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, GetLegendaryTemplate);
-		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, SetLegendaryTemplate);
+		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, GetDefaultTemplate);
+		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, SetDefaultTemplate);
+		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, GetLegendaryTemplate);
+		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, SetLegendaryTemplate);
 		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, GetLegendaryChanceGlobal);
 		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, SetLegendaryChanceGlobal);
 		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, GetFactions);
@@ -1537,8 +1636,8 @@ namespace Plugin::Papyrus::Forms::ActorBase
 		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, SetFacialHairColor);
 		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, GetFaceDetails);
 		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, SetFaceDetails);
-		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, GetBodyTintColor);
-		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, SetBodyTintColor);
+		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, GetSkinTintData);
+		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, SetSkinTintData);
 		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, GetHeadParts);
 		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, SetHeadParts);
 		RE_REGISTER_VM_FUNCTION(a_vm, SCRIPT_NAME, GetRootFaceActorBase);

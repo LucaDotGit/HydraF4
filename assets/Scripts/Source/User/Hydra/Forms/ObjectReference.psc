@@ -67,7 +67,7 @@ Location Function GetCurrentLocation(ObjectReference akRef) Global Native
 Location Function GetLocationByMapMarker(ObjectReference akMarkerRef) Global Native
 
 Struct MapMarkerData
-	int iType
+	int iType = 0
 	string sName
 EndStruct
 

@@ -1,6 +1,8 @@
 #include "Plugin/Internal/Patches/ScriptFunctionTaskletPatch.hpp"
 
-namespace Plugin::Internal::Patches::ScriptFunctionTaskletPatch::Impl
+#include "Plugin/Internal/SettingsManager.hpp"
+
+namespace Plugin::Internal::Patches::Impl
 {
 	static auto SequentialFunctionMap = REX::NotAssignable<std::unordered_map<RE::BSFixedString, std::unordered_set<RE::BSFixedString>>>();
 
@@ -22,7 +24,10 @@ namespace Plugin::Internal::Patches::ScriptFunctionTaskletPatch::Impl
 		return hasFunctionInserted;
 	}
 
-	[[nodiscard]] static bool SequentializeScriptFunction(RE::BSScript::Internal::VirtualMachine& a_scriptVM, const RE::BSScript::IFunction& a_function)
+	[[nodiscard]] static bool SequentializeScriptFunction(
+		const SettingsManager& a_settingsManager,
+		RE::BSScript::Internal::VirtualMachine& a_scriptVM,
+		const RE::BSScript::IFunction& a_function)
 	{
 		if (!a_function.GetIsNative() || a_function.CanBeCalledFromTasklets()) {
 			return false;
@@ -35,6 +40,43 @@ namespace Plugin::Internal::Patches::ScriptFunctionTaskletPatch::Impl
 
 		const auto& functionName = a_function.GetName();
 		if (functionName.empty()) {
+			return false;
+		}
+
+		const auto doMatchPattern = [](std::string_view a_text, std::span<const std::string> a_patterns) -> std::optional<std::string_view> {
+			for (const auto& pattern : a_patterns) {
+				if (REX::MatchWildcardsIgnoreCase(a_text, static_cast<std::string_view>(pattern))) {
+					return static_cast<std::string_view>(pattern);
+				}
+			}
+
+			return std::nullopt;
+		};
+
+		const auto matchScriptNamePattern = doMatchPattern(scriptName,
+			a_settingsManager.GetScriptTaskletPatch_IncludedScriptNamePatternsSetting()->GetValue());
+		const auto matchFunctionNamePattern = doMatchPattern(functionName,
+			a_settingsManager.GetScriptTaskletPatch_IncludedFunctionNamePatternsSetting()->GetValue());
+
+		if (!matchScriptNamePattern.has_value() && !matchFunctionNamePattern.has_value()) {
+			REX::LogTrace(R"(Skipping function "{}.{}" as it does not match any of the included script or function name patterns)"sv,
+				scriptName, functionName);
+			return false;
+		}
+
+		const auto matchExcludedScriptNamePattern = doMatchPattern(scriptName,
+			a_settingsManager.GetScriptTaskletPatch_ExcludedScriptNamePatternsSetting()->GetValue());
+		if (matchExcludedScriptNamePattern.has_value()) {
+			REX::LogTrace(R"(Skipping function "{}.{}" as it matches an excluded script name pattern "{}")"sv,
+				scriptName, functionName, matchExcludedScriptNamePattern.value());
+			return false;
+		}
+
+		const auto matchesExcludedFunctionNamePattern = doMatchPattern(functionName,
+			a_settingsManager.GetScriptTaskletPatch_ExcludedFunctionNamePatternsSetting()->GetValue());
+		if (matchesExcludedFunctionNamePattern.has_value()) {
+			REX::LogTrace(R"(Skipping function "{}.{}" as it matches an excluded function name pattern "{}")"sv,
+				scriptName, functionName, matchesExcludedFunctionNamePattern.value());
 			return false;
 		}
 
@@ -53,7 +95,10 @@ namespace Plugin::Internal::Patches::ScriptFunctionTaskletPatch::Impl
 		return true;
 	}
 
-	[[nodiscard]] static std::uint32_t SequentializeScriptFunctions(RE::BSScript::Internal::VirtualMachine& a_scriptVM, std::span<const RE::BSScript::ObjectTypeInfo::FunctionInfo> a_functions)
+	[[nodiscard]] static std::uint32_t SequentializeScriptFunctions(
+		const SettingsManager& a_settingsManager,
+		RE::BSScript::Internal::VirtualMachine& a_scriptVM,
+		std::span<const RE::BSScript::ObjectTypeInfo::FunctionInfo> a_functions)
 	{
 		auto totalCount = 0ui32;
 
@@ -63,7 +108,7 @@ namespace Plugin::Internal::Patches::ScriptFunctionTaskletPatch::Impl
 				continue;
 			}
 
-			if (SequentializeScriptFunction(a_scriptVM, *func)) {
+			if (SequentializeScriptFunction(a_settingsManager, a_scriptVM, *func)) {
 				totalCount++;
 			}
 		}
@@ -71,7 +116,7 @@ namespace Plugin::Internal::Patches::ScriptFunctionTaskletPatch::Impl
 		return totalCount;
 	}
 
-	static void SequentializeAllScriptFunctions()
+	static void SequentializeAllScriptFunctions(const SettingsManager& a_settingsManager)
 	{
 		const auto internalVM = RE::GameVM::GetInternalVM();
 		if (!internalVM) [[unlikely]] {
@@ -102,8 +147,8 @@ namespace Plugin::Internal::Patches::ScriptFunctionTaskletPatch::Impl
 					continue;
 				}
 
-				totalCount += Impl::SequentializeScriptFunctions(*internalVM, typeInfo->GetThisMemberFunctions());
-				totalCount += Impl::SequentializeScriptFunctions(*internalVM, typeInfo->GetThisStaticFunctions());
+				totalCount += Impl::SequentializeScriptFunctions(a_settingsManager, *internalVM, typeInfo->GetThisMemberFunctions());
+				totalCount += Impl::SequentializeScriptFunctions(a_settingsManager, *internalVM, typeInfo->GetThisStaticFunctions());
 			}
 		}
 
@@ -112,10 +157,7 @@ namespace Plugin::Internal::Patches::ScriptFunctionTaskletPatch::Impl
 		REX::LogDebug(R"(Sequentialized {} script functions in {})"sv,
 			totalCount, std::chrono::duration_cast<std::chrono::duration<REX::Float64, std::milli>>(stopwatch.GetElapsedTime()));
 	}
-}
 
-namespace Plugin::Internal::Patches::ScriptFunctionTaskletPatch
-{
 	class Hook final
 	{
 	public:
@@ -223,18 +265,31 @@ namespace Plugin::Internal::Patches::ScriptFunctionTaskletPatch
 
 		inline static constinit auto SequentialFunctionMutex = REX::NotAssignable<std::mutex>();
 	};
+}
 
-	void OnXseLoad(REL::HookStore& a_hookStore)
+namespace Plugin::Internal::Patches
+{
+	ScriptFunctionTaskletPatch::ScriptFunctionTaskletPatch(const REX::NotNull<std::shared_ptr<SettingsManager>>& a_settingsManager)
+		: _settingsManager(a_settingsManager)
 	{
-		Hook::Setup(a_hookStore);
 	}
 
-	void OnGameDataReady()
+	ScriptFunctionTaskletPatch::~ScriptFunctionTaskletPatch() noexcept = default;
+
+	// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+	void ScriptFunctionTaskletPatch::OnXseLoad(REL::HookStore& a_hookStore)
 	{
-		Impl::SequentializeAllScriptFunctions();
+		Impl::Hook::Setup(a_hookStore);
 	}
 
-	bool IsDelayedFunction(const RE::BSFixedString& a_scriptName, const RE::BSFixedString& a_functionName) noexcept
+	// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+	void ScriptFunctionTaskletPatch::OnGameDataReady()
+	{
+		Impl::SequentializeAllScriptFunctions(*(_settingsManager.get()));
+	}
+
+	// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+	bool ScriptFunctionTaskletPatch::IsDelayedFunction(const RE::BSFixedString& a_scriptName, const RE::BSFixedString& a_functionName) const noexcept
 	{
 		return Impl::IsSequentialFunction(a_scriptName, a_functionName);
 	}

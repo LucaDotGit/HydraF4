@@ -12,8 +12,8 @@ Scriptname Hydra:Float64 Const Hidden Native
 Import Hydra:Int64
 
 Struct Double
-	int iLowPart
-	int iHighPart
+	int iLowPart = 0
+	int iHighPart = 0
 EndStruct
 
 Double Function Copy(Double adValue) Global Native

@@ -50,6 +50,7 @@ namespace Plugin::Internal::IO
 			return true;
 		}
 		catch ([[maybe_unused]] const json_t::exception& error) {
+			a_root = json_t();
 			return false;
 		}
 	}

@@ -97,17 +97,17 @@ Scriptname Hydra:Events Const Hidden Native
 		kCrosshairRefChangeArgs.kIncludedTargetRefs = kIncludedTargetRefs
 
 		Hydra:Events.RegisterForCrosshairRefChange( \
-			Hydra:FunctionRefs.CreateGlobalRef(self, "OnCrosshairRefChange_Local"), kCrosshairRefChangeArgs)
+			Hydra:FunctionRefs.CreateGlobalRef(self, "OnLocalCrosshairRefChange"), kCrosshairRefChangeArgs)
 
 		Hydra:Events.RegisterForCrosshairRefChange( \
-			Hydra:FunctionRefs.CreateGlobalRef(Hydra:ScriptStruct.GetCurrentScriptName(), "OnCrosshairRefChange_Global"), kCrosshairRefChangeArgs)
+			Hydra:FunctionRefs.CreateGlobalRef(Hydra:ScriptStruct.GetCurrentScriptName(), "OnGlobalCrosshairRefChange"), kCrosshairRefChangeArgs)
 	EndFunction
 
-	Function OnCrosshairRefChange_Local(Hydra:Events:CrosshairRefChangeParams akEvent)
+	Function OnLocalCrosshairRefChange(Hydra:Events:CrosshairRefChangeParams akEvent)
 		; ...
 	EndFunction
 
-	Function OnCrosshairRefChange_Global(Hydra:Events:CrosshairRefChangeParams akEvent) Global
+	Function OnGlobalCrosshairRefChange(Hydra:Events:CrosshairRefChangeParams akEvent) Global
 		; ...
 	EndFunction
 	```

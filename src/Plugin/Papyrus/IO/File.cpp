@@ -122,7 +122,7 @@ namespace Plugin::Papyrus::IO::File
 		}
 
 		auto text = std::string{ std::istreambuf_iterator<char>(fileStream), std::istreambuf_iterator<char>() };
-		if (!fileStream.good()) {
+		if (fileStream.bad()) {
 			return std::string(a_default);
 		}
 
@@ -146,11 +146,11 @@ namespace Plugin::Papyrus::IO::File
 
 		auto lines = std::vector<std::string>();
 		for (auto line = std::string(); std::getline(fileStream, line);) {
-			if (!fileStream.good()) {
-				return std::nullopt;
-			}
-
 			lines.push_back(std::move(line));
+		}
+
+		if (fileStream.bad()) {
+			return std::nullopt;
 		}
 
 		return lines;

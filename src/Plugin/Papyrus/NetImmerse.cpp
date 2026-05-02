@@ -139,7 +139,7 @@ namespace Plugin::Papyrus::NetImmerse::Impl
 			return false;
 		}
 
-		auto* extraList = childObject->extra;
+		const auto* extraList = childObject->extra;
 		if (!extraList) {
 			return false;
 		}
@@ -149,7 +149,7 @@ namespace Plugin::Papyrus::NetImmerse::Impl
 			return false;
 		}
 
-		return RE::NiDynamicCast<const ExtraDataT*>(extraData.get()) != nullptr;
+		return RE::dynamic_ni_pointer_cast<ExtraDataT>(extraData) != nullptr;
 	}
 
 	template <NiExtraData ExtraDataT, class ResultT>
@@ -175,7 +175,7 @@ namespace Plugin::Papyrus::NetImmerse::Impl
 			return a_default;
 		}
 
-		auto* extraList = childObject->extra;
+		const auto* extraList = childObject->extra;
 		if (!extraList) {
 			return a_default;
 		}
@@ -185,7 +185,7 @@ namespace Plugin::Papyrus::NetImmerse::Impl
 			return a_default;
 		}
 
-		const auto* extraDataType = RE::NiDynamicCast<const ExtraDataT*>(extraData.get());
+		const auto extraDataType = RE::dynamic_ni_pointer_cast<ExtraDataT>(extraData);
 		if (!extraDataType) {
 			return a_default;
 		}
@@ -211,22 +211,22 @@ namespace Plugin::Papyrus::NetImmerse::Impl
 			return false;
 		}
 
-		auto childObject = RE::NiPointer(rootObject->GetObjectByName(a_nodeName));
+		const auto childObject = RE::NiPointer(rootObject->GetObjectByName(a_nodeName));
 		if (!childObject) {
 			return false;
 		}
 
-		auto* extraList = childObject->extra;
+		const auto* extraList = childObject->extra;
 		if (!extraList) {
 			return false;
 		}
 
-		auto extraData = childObject->GetExtraData(a_dataName);
+		const auto extraData = childObject->GetExtraData(a_dataName);
 		if (!extraData) {
 			return false;
 		}
 
-		auto* extraDataType = RE::NiDynamicCast<ExtraDataT*>(extraData.get());
+		const auto extraDataType = RE::dynamic_ni_pointer_cast<ExtraDataT>(extraData);
 		if (!extraDataType) {
 			return false;
 		}
@@ -259,7 +259,7 @@ namespace Plugin::Papyrus::NetImmerse::Impl
 			return std::nullopt;
 		}
 
-		auto* extraList = childObject->extra;
+		const auto* extraList = childObject->extra;
 		if (!extraList) {
 			return std::nullopt;
 		}
@@ -269,7 +269,7 @@ namespace Plugin::Papyrus::NetImmerse::Impl
 			return std::nullopt;
 		}
 
-		const auto* extraDataType = RE::NiDynamicCast<const ExtraDataT*>(extraData.get());
+		const auto extraDataType = RE::dynamic_ni_pointer_cast<ExtraDataT>(extraData);
 		if (!extraDataType) {
 			return std::nullopt;
 		}
@@ -295,22 +295,22 @@ namespace Plugin::Papyrus::NetImmerse::Impl
 			return false;
 		}
 
-		auto childObject = RE::NiPointer(rootObject->GetObjectByName(a_nodeName));
+		const auto childObject = RE::NiPointer(rootObject->GetObjectByName(a_nodeName));
 		if (!childObject) {
 			return false;
 		}
 
-		auto* extraList = childObject->extra;
+		const auto* extraList = childObject->extra;
 		if (!extraList) {
 			return false;
 		}
 
-		auto extraData = childObject->GetExtraData(a_dataName);
+		const auto extraData = childObject->GetExtraData(a_dataName);
 		if (!extraData) {
 			return false;
 		}
 
-		auto* extraDataType = RE::NiDynamicCast<ExtraDataT*>(extraData.get());
+		const auto extraDataType = RE::dynamic_ni_pointer_cast<ExtraDataT>(extraData);
 		if (!extraDataType) {
 			return false;
 		}

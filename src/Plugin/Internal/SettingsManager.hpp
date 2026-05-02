@@ -32,6 +32,10 @@ namespace Plugin::Internal
 		[[nodiscard]] auto GetPrintCommandRunnerCommandsSetting() const noexcept { return _printCommandRunnerCommandsSetting; }
 		[[nodiscard]] auto GetAddRequirementRunnerCancelButtonSetting() const noexcept { return _addRequirementRunnerCancelButtonSetting; }
 		[[nodiscard]] auto GetShowBakaFrameworkIncompatibilitiesSetting() const noexcept { return _showBakaFrameworkIncompatibilitiesSetting; }
+		[[nodiscard]] auto GetScriptTaskletPatch_IncludedScriptNamePatternsSetting() const noexcept { return _scriptTaskletPatch_IncludedScriptNamePatternsSetting; }
+		[[nodiscard]] auto GetScriptTaskletPatch_ExcludedScriptNamePatternsSetting() const noexcept { return _scriptTaskletPatch_ExcludedScriptNamePatternsSetting; }
+		[[nodiscard]] auto GetScriptTaskletPatch_IncludedFunctionNamePatternsSetting() const noexcept { return _scriptTaskletPatch_IncludedFunctionNamePatternsSetting; }
+		[[nodiscard]] auto GetScriptTaskletPatch_ExcludedFunctionNamePatternsSetting() const noexcept { return _scriptTaskletPatch_ExcludedFunctionNamePatternsSetting; }
 
 		void LoadSettings();
 
@@ -48,6 +52,10 @@ namespace Plugin::Internal
 		REX::NotNull<std::shared_ptr<REX::Toml::Bool>> _printCommandRunnerCommandsSetting;
 		REX::NotNull<std::shared_ptr<REX::Toml::Bool>> _addRequirementRunnerCancelButtonSetting;
 		REX::NotNull<std::shared_ptr<REX::Toml::Bool>> _showBakaFrameworkIncompatibilitiesSetting;
+		REX::NotNull<std::shared_ptr<REX::Toml::StringArray>> _scriptTaskletPatch_IncludedScriptNamePatternsSetting;
+		REX::NotNull<std::shared_ptr<REX::Toml::StringArray>> _scriptTaskletPatch_ExcludedScriptNamePatternsSetting;
+		REX::NotNull<std::shared_ptr<REX::Toml::StringArray>> _scriptTaskletPatch_IncludedFunctionNamePatternsSetting;
+		REX::NotNull<std::shared_ptr<REX::Toml::StringArray>> _scriptTaskletPatch_ExcludedFunctionNamePatternsSetting;
 		REX::Toml::SettingStore _settings;
 	};
 }

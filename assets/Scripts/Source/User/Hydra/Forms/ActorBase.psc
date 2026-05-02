@@ -9,12 +9,17 @@ Import Hydra:Vectors3
 
 Struct FactionRank
 	Faction kFaction
-	int iRank
+	int iRank = 0
 EndStruct
 
 Struct PerkRank
 	Perk kPerk
-	int iRank
+	int iRank = 0
+EndStruct
+
+Struct SkinTintData
+	Color kColor
+	float fStrength = 0.0
 EndStruct
 
 string Function GetShortName(ActorBase akActorBase) Global Native
@@ -168,8 +173,8 @@ Function SetFacialHairColor(ActorBase akActorBase, ColorForm akValue) Global Nat
 TextureSet Function GetFaceDetails(ActorBase akActorBase) Global Native
 Function SetFaceDetails(ActorBase akActorBase, TextureSet akValue) Global Native
 
-Color Function GetBodyTintColor(ActorBase akActorBase) Global Native
-Function SetBodyTintColor(ActorBase akActorBase, Color akValue) Global Native
+SkinTintData Function GetSkinTintData(ActorBase akActorBase) Global Native
+bool Function SetSkinTintData(ActorBase akActorBase, SkinTintData akValue) Global Native
 
 HeadPart[] Function GetHeadParts(ActorBase akActorBase) Global Native
 Function SetHeadParts(ActorBase akActorBase, HeadPart[] akValues) Global Native

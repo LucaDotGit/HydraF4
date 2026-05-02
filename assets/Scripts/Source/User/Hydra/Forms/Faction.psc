@@ -6,8 +6,8 @@ Scriptname Hydra:Forms:Faction Const Hidden Native
 
 Struct RelationEntry
 	Faction kFaction
-	int iModifier
-	int iCombatReaction
+	int iModifier = 0
+	int iCombatReaction = 0
 EndStruct
 
 ObjectReference Function GetExteriorJailMarker(Faction akFaction) Global Native

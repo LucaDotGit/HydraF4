@@ -6,7 +6,7 @@ Scriptname Hydra:Forms:MiscObject Const Hidden Native
 
 Struct ComponentEntry
 	Component kComponent
-	int iCount
+	int iCount = 1
 EndStruct
 
 ComponentEntry[] Function GetComponents(MiscObject akMiscObject) Global Native

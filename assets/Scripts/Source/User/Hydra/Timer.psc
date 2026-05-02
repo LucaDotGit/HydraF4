@@ -9,6 +9,25 @@ Scriptname Hydra:Timer Const Hidden Native
 	- The `abPersistent` parameter determines whether the timer is stored is saves (`true`)
 	  or whether it only persists until the next game load (`false`).
 	- All local timers will be automatically stopped once their parent object is deleted.
+
+	Script Example:
+	```
+	Function MyFunction()
+		Var[] kArgs = new Var[1]
+		kArgs[0] = 123
+
+		Hydra:Timer.StartGameTime(Hydra:FunctionRefs.CreateLocalRef(self, "MyGameTimerCallback"), 5.0, kArgs)
+		Hydra:Timer.StartRepeatingRealTime(Hydra:FunctionRefs.CreateLocalRef(self, "MyRealTimeTimerCallback"), 10.0, kArgs)
+	EndFunction
+
+	Function MyGameTimerCallback(int aiValue)
+		; ...
+	EndFunction
+
+	Function MyRealTimeTimerCallback(int aiValue)
+		; ...
+	EndFunction
+	```
 /;
 
 Import Hydra:FunctionRefs

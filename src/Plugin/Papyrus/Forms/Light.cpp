@@ -133,7 +133,7 @@ namespace Plugin::Papyrus::Forms::Light
 			return std::nullopt;
 		}
 
-		return ColorStruct::FromHex(std::atomic_ref(a_light->data.color).load(std::memory_order_acquire));
+		return ColorStruct::FromHexBgr(std::atomic_ref(a_light->data.color).load(std::memory_order_acquire));
 	}
 
 	static void SetColor(RE::BSScript::IVirtualMachine& a_vm, RE::BSScript::StackID a_stackId, RE::BSScript::StaticTag /*a_staticTag*/,
@@ -150,7 +150,7 @@ namespace Plugin::Papyrus::Forms::Light
 			return;
 		}
 
-		std::atomic_ref(a_light->data.color).store(a_value->ToHex(), std::memory_order_release);
+		std::atomic_ref(a_light->data.color).store(a_value->ToHexBgr(), std::memory_order_release);
 	}
 
 	static REX::Float32 GetColorFade(RE::BSScript::IVirtualMachine& a_vm, RE::BSScript::StackID a_stackId, RE::BSScript::StaticTag /*a_staticTag*/,

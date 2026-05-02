@@ -42,15 +42,11 @@ namespace Plugin::Internal::IO
 		const auto ioLock = _ioMutex->LockShared(a_path);
 
 		try {
-			auto result = toml::try_parse(a_path, Core::TomlUtility::SPECIFICATION_VERSION);
-			if (!result.is_ok()) {
-				return false;
-			}
-
-			a_root = std::move(result).unwrap();
+			a_root = toml::parse(a_path, Core::TomlUtility::SPECIFICATION_VERSION);
 			return true;
 		}
 		catch ([[maybe_unused]] const toml::exception& error) {
+			a_root = toml_t();
 			return false;
 		}
 	}

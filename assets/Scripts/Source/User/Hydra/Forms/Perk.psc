@@ -8,23 +8,23 @@ Scriptname Hydra:Forms:Perk Const Hidden Native
 /;
 
 Struct Entry
-	int iRank
-	int iPriority
+	int iRank = 0
+	int iPriority = 0
 EndStruct
 
 Struct QuestEntry
 	Quest kQuest
-	int iStage
+	int iStage = 0
 EndStruct
 
 Struct ValueTwoEntry
-	float fValue01
-	float fValue02
+	float fValue01 = 0.0
+	float fValue02 = 0.0
 EndStruct
 
 Struct ActorValueEntry
 	ActorValue kActorValue
-	float fValue
+	float fValue = 0.0
 EndStruct
 
 bool Function GetIsTrait(Perk akPerk) Global Native

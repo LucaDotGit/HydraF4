@@ -134,8 +134,9 @@ namespace Plugin::Papyrus::ScriptObject
 				return 0.0_f32;
 			}
 
-			const auto timeLock = RE::BSAutoLock(gameVM->GetRuntimeData().vmTimeLock);
-			return timer->GetRemainingSeconds(gameVM->GetRuntimeData().currentTime);
+			const auto& runtimeData = gameVM->GetRuntimeData();
+			const auto timeLock = RE::BSAutoLock(runtimeData.vmTimeLock);
+			return timer->GetRemainingSeconds(runtimeData.currentTime);
 		}
 
 		return 0.0_f32;
@@ -169,8 +170,9 @@ namespace Plugin::Papyrus::ScriptObject
 				return 0.0_f32;
 			}
 
-			const auto timeLock = RE::BSAutoLock(gameVM->GetRuntimeData().vmTimeLock);
-			return timer->GetRemainingGameTimeSeconds(gameVM->GetRuntimeData().currentGameTime);
+			const auto& runtimeData = gameVM->GetRuntimeData();
+			const auto timeLock = RE::BSAutoLock(runtimeData.vmTimeLock);
+			return timer->GetRemainingGameTimeSeconds(runtimeData.currentGameTime);
 		}
 
 		return 0.0_f32;

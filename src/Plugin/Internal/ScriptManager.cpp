@@ -7,8 +7,7 @@
 namespace Plugin::Internal
 {
 	ScriptManager::ScriptManager(const REX::NotNull<std::shared_ptr<SettingsManager>>& a_settingsManager)
-		: _settingsManager(a_settingsManager),
-		  _scriptDumper(std::make_shared<Script::ScriptDumper>(a_settingsManager)),
+		: _scriptDumper(std::make_shared<Script::ScriptDumper>(a_settingsManager)),
 		  _memoryMap(std::make_shared<Script::ScriptVariantMap>()),
 		  _memorySet(std::make_shared<Script::ScriptVariantSet>()),
 		  _temporaryMap(std::make_shared<Script::ScriptVariantMap>()),

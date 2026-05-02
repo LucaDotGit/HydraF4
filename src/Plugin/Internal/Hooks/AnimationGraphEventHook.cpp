@@ -26,10 +26,7 @@ namespace Plugin::Internal::Hooks::AnimationGraphEventHook::Impl
 				TO_RTTI.get(),
 				0));
 	}
-}
 
-namespace Plugin::Internal::Hooks::AnimationGraphEventHook
-{
 	template <Impl::HookConstraint T>
 	class Hook final
 	{
@@ -77,7 +74,8 @@ namespace Plugin::Internal::Hooks::AnimationGraphEventHook
 			}
 
 			auto* selfRef = Impl::DynamicCast(a_self);
-			if (!selfRef) {
+			if (!selfRef) [[unlikely]] {
+				REX::Assert(false);
 				return RE::BSEventNotifyControl::kContinue;
 			}
 
@@ -96,11 +94,14 @@ namespace Plugin::Internal::Hooks::AnimationGraphEventHook
 
 		inline static constinit auto ProcessEventHook = std::shared_ptr<REL::HookVft<decltype(&Hook::ProcessEvent)>>();
 	};
+}
 
+namespace Plugin::Internal::Hooks::AnimationGraphEventHook
+{
 	void OnXseLoad(REL::HookStore& a_hookStore)
 	{
-		Hook<RE::TESObjectREFR>::Setup(a_hookStore);
-		Hook<RE::Actor>::Setup(a_hookStore);
-		Hook<RE::PlayerCharacter>::Setup(a_hookStore);
+		Impl::Hook<RE::TESObjectREFR>::Setup(a_hookStore);
+		Impl::Hook<RE::Actor>::Setup(a_hookStore);
+		Impl::Hook<RE::PlayerCharacter>::Setup(a_hookStore);
 	}
 }

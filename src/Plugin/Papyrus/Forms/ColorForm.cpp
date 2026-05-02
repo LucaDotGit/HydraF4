@@ -22,7 +22,7 @@ namespace Plugin::Papyrus::Forms::ColorForm
 			return std::nullopt;
 		}
 
-		return ColorStruct::FromHex(std::atomic_ref(a_colorForm->hexColor).load(std::memory_order_acquire));
+		return ColorStruct::FromHexAbgr(std::atomic_ref(a_colorForm->hexColor).load(std::memory_order_acquire));
 	}
 
 	static void SetColor(RE::BSScript::IVirtualMachine& a_vm, RE::BSScript::StackID a_stackId, RE::BSScript::StaticTag /*a_staticTag*/,
@@ -39,35 +39,7 @@ namespace Plugin::Papyrus::Forms::ColorForm
 			return;
 		}
 
-		std::atomic_ref(a_colorForm->hexColor).store(a_value->ToHex(), std::memory_order_release);
-		a_colorForm->flags.set_atomic(true, ColorFlags::kRemappingIndex);
-	}
-
-	static std::uint32_t GetHexColor(RE::BSScript::IVirtualMachine& a_vm, RE::BSScript::StackID a_stackId, RE::BSScript::StaticTag /*a_staticTag*/,
-		RE::BGSColorForm* a_colorForm)
-	{
-		if (!a_colorForm) [[unlikely]] {
-			a_vm.PostError(::Plugin::Internal::Script::ScriptErrors::COLOR_FORM_NULL, a_stackId);
-			return 0;
-		}
-
-		if (a_colorForm->flags.any_atomic(ColorFlags::kRemappingIndex)) {
-			return 0;
-		}
-
-		return std::atomic_ref(a_colorForm->hexColor).load(std::memory_order_acquire);
-	}
-
-	static void SetHexColor(RE::BSScript::IVirtualMachine& a_vm, RE::BSScript::StackID a_stackId, RE::BSScript::StaticTag /*a_staticTag*/,
-		RE::BGSColorForm* a_colorForm,
-		std::uint32_t a_value)
-	{
-		if (!a_colorForm) [[unlikely]] {
-			a_vm.PostError(::Plugin::Internal::Script::ScriptErrors::COLOR_FORM_NULL, a_stackId);
-			return;
-		}
-
-		std::atomic_ref(a_colorForm->hexColor).store(a_value, std::memory_order_release);
+		std::atomic_ref(a_colorForm->hexColor).store(a_value->ToHexAbgr(), std::memory_order_release);
 		a_colorForm->flags.set_atomic(true, ColorFlags::kRemappingIndex);
 	}
 
@@ -157,8 +129,6 @@ namespace Plugin::Papyrus::Forms::ColorForm
 	{
 		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, GetColor);
 		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, SetColor);
-		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, GetHexColor);
-		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, SetHexColor);
 		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, GetRemappingIndex);
 		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, SetRemappingIndex);
 		RE_REGISTER_VM_FUNCTION_ASYNC(a_vm, SCRIPT_NAME, HasFlag);

@@ -5,10 +5,10 @@ Scriptname Hydra:Forms:MovementType Const Hidden Native
 /;
 
 Struct SpeedEntry
-	float fStanding
-	float fWalking
-	float fRunning
-	float fSprinting
+	float fStanding = 0.0
+	float fWalking = 0.0
+	float fRunning = 0.0
+	float fSprinting = 0.0
 EndStruct
 
 string Function GetName(MovementType akMovementType) Global Native

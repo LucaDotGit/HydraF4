@@ -9,10 +9,7 @@ namespace Plugin::Internal::Hooks::ActorValueChangeHook::Impl
 		std::derived_from<T, RE::TESObjectREFR> &&
 		!std::is_pointer_v<T> &&
 		!std::is_reference_v<T>;
-}
 
-namespace Plugin::Internal::Hooks::ActorValueChangeHook
-{
 	template <Impl::HookConstraint T>
 	class Hook final
 	{
@@ -67,7 +64,8 @@ namespace Plugin::Internal::Hooks::ActorValueChangeHook
 			}
 
 			auto* selfRef = RE::DynamicCast<RE::TESObjectREFR*>(a_self);
-			if (!selfRef) {
+			if (!selfRef) [[unlikely]] {
+				REX::Assert(false);
 				return;
 			}
 
@@ -105,7 +103,8 @@ namespace Plugin::Internal::Hooks::ActorValueChangeHook
 			}
 
 			auto* selfRef = RE::DynamicCast<RE::TESObjectREFR*>(a_self);
-			if (!selfRef) {
+			if (!selfRef) [[unlikely]] {
+				REX::Assert(false);
 				return;
 			}
 
@@ -124,11 +123,14 @@ namespace Plugin::Internal::Hooks::ActorValueChangeHook
 		inline static constinit auto ModActorValueHook = std::shared_ptr<REL::HookVft<decltype(&Hook::ModActorValue)>>();
 		inline static constinit auto SetActorValueHook = std::shared_ptr<REL::HookVft<decltype(&Hook::SetActorValue)>>();
 	};
+}
 
+namespace Plugin::Internal::Hooks::ActorValueChangeHook
+{
 	void OnXseLoad(REL::HookStore& a_hookStore)
 	{
-		Hook<RE::TESObjectREFR>::Setup(a_hookStore);
-		Hook<RE::Actor>::Setup(a_hookStore);
-		Hook<RE::PlayerCharacter>::Setup(a_hookStore);
+		Impl::Hook<RE::TESObjectREFR>::Setup(a_hookStore);
+		Impl::Hook<RE::Actor>::Setup(a_hookStore);
+		Impl::Hook<RE::PlayerCharacter>::Setup(a_hookStore);
 	}
 }

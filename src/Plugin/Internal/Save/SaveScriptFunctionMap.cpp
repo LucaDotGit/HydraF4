@@ -48,7 +48,7 @@ namespace Plugin::Internal::Save
 				continue;
 			}
 
-			const auto eventStructName = RE::BSFixedString(std::invoke(*eventFunctor->GetEventArgsNameCallback()));
+			const auto eventStructName = RE::BSFixedString(std::invoke(*(eventFunctor->GetEventArgsNameCallback())));
 			const auto eventStructArgs = CreateEventArgsStruct(scriptVM, eventStructName, eventInfo->eventArgs);
 
 			if (!eventStructArgs.has_value()) {
@@ -56,7 +56,7 @@ namespace Plugin::Internal::Save
 			}
 
 			constexpr auto IS_EVENT_HANDLER_PERSISTENT = false;
-			const auto eventHandler = std::invoke(*eventFunctor->GetCreateCallback(), eventFunctionRef, eventStructArgs.value(), IS_EVENT_HANDLER_PERSISTENT);
+			const auto eventHandler = std::invoke(*(eventFunctor->GetCreateCallback()), eventFunctionRef, eventStructArgs.value(), IS_EVENT_HANDLER_PERSISTENT);
 
 			if (!_eventSystem->Register(eventFunctionRef, eventHandler)) {
 				continue;

@@ -1,6 +1,19 @@
 #pragma once
 
-namespace Plugin::Internal::Patches::ScriptTypePreloadPatch
+namespace Plugin::Internal::Patches
 {
-	void OnGameDataReady();
+	class ScriptTypePreloadPatch final
+	{
+	public:
+		ScriptTypePreloadPatch() = default;
+		~ScriptTypePreloadPatch() noexcept = default;
+
+		ScriptTypePreloadPatch(const ScriptTypePreloadPatch&) = delete;
+		ScriptTypePreloadPatch(ScriptTypePreloadPatch&&) = delete;
+
+		ScriptTypePreloadPatch& operator=(const ScriptTypePreloadPatch&) = delete;
+		ScriptTypePreloadPatch& operator=(ScriptTypePreloadPatch&&) = delete;
+
+		void OnGameDataReady();
+	};
 }

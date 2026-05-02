@@ -5,10 +5,10 @@ Scriptname Hydra:Vectors4 Const Hidden Native
 /;
 
 Struct Vector4
-	float fX
-	float fY
-	float fZ
-	float fW
+	float fX = 0.0
+	float fY = 0.0
+	float fZ = 0.0
+	float fW = 0.0
 EndStruct
 
 Vector4 Function Create(float afX = 0.0, float afY = 0.0, float afZ = 0.0, float afW = 0.0) Global
