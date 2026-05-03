@@ -17,8 +17,7 @@ iLogFileCount = -1
 bLogPapyrusMessages = false
 
 # [Default: false] Whether found Papyrus scripts compiled in debug mode are printed to the plugin's log file.
-# Debug scripts will be determined by whether they have any debug line numbers present,
-# which are normally omitted in full release builds.
+# Debug scripts will be determined by whether they have any debug line numbers present.
 # Note that script debug information has to be loaded by the engine first (`Papyrus:bLoadDebugInformation = 1`).
 bLogDebugPapyrusScripts = false
 
@@ -30,9 +29,6 @@ bLogInvalidLinkedPapyrusStructs = true
 
 # [Default: false] Whether found delayed Papyrus functions are printed to the plugin's log file.
 # Delayed functions are ones that synchronize their execution to the game's framerate.
-# This results in them always having to wait at least one frame for the execution to even start.
-# Hydra basically removes delayed functions completely, by making them be called directly on the current thread,
-# guarded by a global mutex.
 bLogDelayedPapyrusFunctions = false
 
 # [Default: false] Whether found latent Papyrus functions are printed to the plugin's log file.
@@ -54,7 +50,15 @@ bShowBakaFrameworkIncompatibilities = true
 
 [Patches]
 
+# The script tasklet patch allows delayed Papyrus functions to be called directly on the calling thread,
+# guarded by a global mutex, instead of being queued for the next game frame.
+# This drastically improves the execution time of most scripts,
+# but may also change behavior if said scripts previously relied on the delayed nature.
+# To mitigate this, the patch can be configured to only apply to certain scripts and functions based on name patterns.
+
 # The script name patterns to include in the script tasklet patch.
+#
+# You should leave the default value as is.
 kScriptTaskletPatch_IncludedScriptNamePatterns = [
 	"Hydra:*"
 ]
@@ -63,25 +67,31 @@ kScriptTaskletPatch_IncludedScriptNamePatterns = [
 kScriptTaskletPatch_ExcludedScriptNamePatterns = []
 
 # The function name patterns to include in the script tasklet patch.
-kScriptTaskletPatch_IncludedFunctionNamePatterns = [
-	"Can*",
-	"Contains*",
-	"Count*",
-	"Does*",
-	"Find*",
-	"Get*",
-	"Has*",
-	"Is*",
-	"Lookup*",
-	"Match*",
-	"Query*",
-	"Random*",
-	"Read*",
-	"Search*",
-	"TryGet*",
-	"TryToGet*",
-	"Would*"
-]
+#
+# The recommended, but highly experimental, values are:
+# ```
+# [
+#     "Are*",
+#     "Bitwise*",
+#     "Can*",
+#     "Contains*",
+#     "Count*",
+#     "Does*",
+#     "Find*",
+#     "Get*",
+#     "Has*",
+#     "Is*",
+#     "Lookup*",
+#     "Match*",
+#     "Query*",
+#     "Random*",
+#     "Read*",
+#     "Search*",
+#     "Will*",
+#     "Would*"
+# ]
+# ```
+kScriptTaskletPatch_IncludedFunctionNamePatterns = []
 
 # The function name patterns to exclude from the script tasklet patch.
 kScriptTaskletPatch_ExcludedFunctionNamePatterns = []

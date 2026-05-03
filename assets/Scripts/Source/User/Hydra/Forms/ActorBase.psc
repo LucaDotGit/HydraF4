@@ -174,7 +174,7 @@ TextureSet Function GetFaceDetails(ActorBase akActorBase) Global Native
 Function SetFaceDetails(ActorBase akActorBase, TextureSet akValue) Global Native
 
 SkinTintData Function GetSkinTintData(ActorBase akActorBase) Global Native
-bool Function SetSkinTintData(ActorBase akActorBase, SkinTintData akValue) Global Native
+bool Function SetSkinTintData(ActorBase akActorBase, SkinTintData akData) Global Native
 
 HeadPart[] Function GetHeadParts(ActorBase akActorBase) Global Native
 Function SetHeadParts(ActorBase akActorBase, HeadPart[] akValues) Global Native

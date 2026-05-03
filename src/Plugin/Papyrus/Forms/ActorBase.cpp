@@ -1325,14 +1325,14 @@ namespace Plugin::Papyrus::Forms::ActorBase
 
 	static bool SetSkinTintData(RE::BSScript::IVirtualMachine& a_vm, RE::BSScript::StackID a_stackId, RE::BSScript::StaticTag /*a_staticTag*/,
 		RE::TESNPC* a_actorBase,
-		SkinTintData a_value)
+		SkinTintData a_data)
 	{
 		if (!a_actorBase) [[unlikely]] {
 			a_vm.PostError(::Plugin::Internal::Script::ScriptErrors::ACTOR_BASE_NULL, a_stackId);
 			return false;
 		}
 
-		if (!a_value) [[unlikely]] {
+		if (!a_data) [[unlikely]] {
 			a_vm.PostError(::Plugin::Internal::Script::ScriptErrors::STRUCT_NULL, a_stackId);
 			return false;
 		}
@@ -1348,11 +1348,11 @@ namespace Plugin::Papyrus::Forms::ActorBase
 		const auto* skinTintPaletteEntry = RE::DynamicCast<const RE::BGSCharacterTint::PaletteEntry*>(skinTintEntry);
 		const auto skinTintPaletteEntryColor = skinTintPaletteEntry ? skinTintPaletteEntry->tintingColor : 0;
 
-		const auto skinTintColor = a_value.Find<std::optional<ColorStruct>>(Impl::COLOR_KEY).value();
-		const auto skinTintStrength = a_value.FindOrDefault<float>(Impl::STRENGTH_KEY);
+		const auto skinTintColor = a_data.Find<std::optional<ColorStruct>>(Impl::COLOR_KEY).value();
+		const auto skinTintStrength = a_data.Find<REX::Float32>(Impl::STRENGTH_KEY).value();
 
 		const auto newSkinTintColor = skinTintColor.has_value() ? skinTintColor->ToHexBgr() : skinTintPaletteEntryColor;
-		const auto newSkinTintStrength = skinTintStrength > 0.0f ? skinTintStrength : (static_cast<REX::Float32>(skinTintEntryStrength) / Impl::ACTOR_SKIN_TINT_INTENSITY_DIVIDER);
+		const auto newSkinTintStrength = skinTintStrength > 0.0_f32 ? skinTintStrength : (static_cast<REX::Float32>(skinTintEntryStrength) / Impl::ACTOR_SKIN_TINT_INTENSITY_DIVIDER);
 
 		a_actorBase->SetTintingData(skinTintId.value(), newSkinTintStrength, newSkinTintColor);
 		a_actorBase->AddChange(RE::TESNPC::ChangeFlags::kFace);

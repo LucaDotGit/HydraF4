@@ -142,7 +142,7 @@ namespace Plugin::Internal::Patches::Impl
 				}
 
 				if (!typeInfo->IsLinkedValid()) [[unlikely]] {
-					REX::LogWarning(R"(Skipping invalid linked script type "{}")"sv,
+					REX::LogDebug(R"(Skipping invalid linked script type "{}")"sv,
 						typeInfo->GetName());
 					continue;
 				}

@@ -13,9 +13,9 @@ namespace Plugin::Papyrus::Uuids
 	}
 
 	static std::optional<UuidStruct> FromBytes(RE::BSScript::StaticTag /*a_staticTag*/,
-		std::vector<std::uint8_t> a_data)
+		std::vector<std::uint8_t> a_values)
 	{
-		return UuidStruct::FromBytes(a_data);
+		return UuidStruct::FromBytes(a_values);
 	}
 
 	static std::optional<std::vector<std::uint8_t>> ToBytes(RE::BSScript::IVirtualMachine& a_vm, RE::BSScript::StackID a_stackId, RE::BSScript::StaticTag /*a_staticTag*/,

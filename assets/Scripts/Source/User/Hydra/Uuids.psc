@@ -13,7 +13,7 @@ EndStruct
 
 Uuid Function Generate() Global Native
 
-Uuid Function FromBytes(int[] akData) Global Native
+Uuid Function FromBytes(int[] akValues) Global Native
 int[] Function ToBytes(Uuid akValue) Global Native
 
 Uuid Function FromString(string asValue) Global Native

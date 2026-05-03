@@ -149,7 +149,7 @@ namespace Plugin::PapyrusManager::Impl
 
 		auto objectTypeInfo = RE::BSTSmartPointer<RE::BSScript::ObjectTypeInfo>();
 		if (!a_vm->GetScriptObjectType(RE::BSFixedString(a_scriptName), objectTypeInfo) || !objectTypeInfo) [[unlikely]] {
-			REX::Fail(R"(Failed to load script type "{}")"sv,
+			REX::Fail(R"(Failed to load script type "{}".)"sv,
 				a_scriptName);
 		}
 
