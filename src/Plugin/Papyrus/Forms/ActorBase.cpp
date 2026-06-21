@@ -1180,6 +1180,16 @@ namespace Plugin::Papyrus::Forms::ActorBase
 
 		const auto perkRanks = a_actorBase->GetPerks();
 
+		// BGSPerkRankArray::GetPerks() returns a span built from `perks.data()` and
+		// the separately-stored `perkCount`. For some base forms (notably the
+		// player's) these desync — `perkCount` is non-zero while the backing array
+		// is null/stale — so iterating the span walks invalid PerkRankData* and
+		// crashes to desktop. Bail out when the backing storage is missing.
+		// (GetFactions is unaffected: it iterates its container by size().)
+		if (!perkRanks.data()) {
+			return std::vector<PerkRank>{};
+		}
+
 		auto result = std::vector<PerkRank>();
 		result.reserve(perkRanks.size());
 
